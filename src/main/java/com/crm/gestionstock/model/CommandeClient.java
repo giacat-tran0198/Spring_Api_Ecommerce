@@ -15,7 +15,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "commandeclient")
-public class CommandeClient extends AbstractEntity{
+public class CommandeClient extends AbstractEntity {
 
     @Column(name = "code")
     private String code;

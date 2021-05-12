@@ -13,7 +13,7 @@ import javax.persistence.Embeddable;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Embeddable
-public class Adresse{
+public class Adresse {
     @Column(name = "address1")
     private String adresse1;
 
