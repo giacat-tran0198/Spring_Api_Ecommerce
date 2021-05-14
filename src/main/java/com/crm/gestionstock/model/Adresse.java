@@ -14,11 +14,11 @@ import javax.persistence.Embeddable;
 @EqualsAndHashCode
 @Embeddable
 public class Adresse {
-    @Column(name = "address1")
+    @Column(name = "adresse1")
     private String adresse1;
 
-    @Column(name = "address2")
-    private String address2;
+    @Column(name = "adresse2")
+    private String adresse2;
 
     @Column(name = "ville")
     private String ville;
