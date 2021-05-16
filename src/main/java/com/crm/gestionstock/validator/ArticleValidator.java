@@ -7,34 +7,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArticleValidator {
-    public static List<String> validate(ArticleDto articleDto) {
+    public static List<String> validate(ArticleDto dto) {
         List<String> errors = new ArrayList<>();
-        if (articleDto == null) {
-            errors.add("Veuillez renseigner le code d'article");
-            errors.add("Veuillez renseigner le designation d'article");
-            errors.add("Veuillez renseigner le prix unitaire HT d'article");
-            errors.add("Veuillez renseigner le prix unitaire TTC d'article");
-            errors.add("Veuillez renseigner le taux TVA d'article");
-            errors.add("Veuillez selectionner un categorie d'article");
-        } else {
-            if (!StringUtils.hasLength(articleDto.getCodeArticle())) {
-                errors.add("Veuillez renseigner le code d'article");
-            }
-            if (!StringUtils.hasLength(articleDto.getDesignation())) {
-                errors.add("Veuillez renseigner le designation d'article");
-            }
-            if (articleDto.getPrixUnitaireHt() == null) {
-                errors.add("Veuillez renseigner le prix unitaire HT d'article");
-            }
-            if (articleDto.getPrixUnitaireTtc() == null) {
-                errors.add("Veuillez renseigner le prix unitaire TTC d'article");
-            }
-            if (articleDto.getTauxtva() == null) {
-                errors.add("Veuillez renseigner le taux TVA d'article");
-            }
-            if (articleDto.getCategory() == null) {
-                errors.add("Veuillez selectionner un categorie d'article");
-            }
+
+        if (dto == null) {
+            errors.add("Veuillez renseigner le code de l'article");
+            errors.add("Veuillez renseigner la designation de l'article");
+            errors.add("Veuillez renseigner le prix unitaire HT l'article");
+            errors.add("Veuillez renseigner le taux TVA de l'article");
+            errors.add("Veuillez renseigner le prix unitaire TTC de l'article");
+            errors.add("Veuillez selectionner une categorie");
+            return errors;
+        }
+
+        if (!StringUtils.hasLength(dto.getCodeArticle())) {
+            errors.add("Veuillez renseigner le code de l'article");
+        }
+        if (!StringUtils.hasLength(dto.getDesignation())) {
+            errors.add("Veuillez renseigner la designation de l'article");
+        }
+        if (dto.getPrixUnitaireHt() == null) {
+            errors.add("Veuillez renseigner le prix unitaire HT l'article");
+        }
+        if (dto.getTauxtva() == null) {
+            errors.add("Veuillez renseigner le taux TVA de l'article");
+        }
+        if (dto.getPrixUnitaireTtc() == null) {
+            errors.add("Veuillez renseigner le prix unitaire TTC de l'article");
+        }
+        if (dto.getCategory() == null || dto.getCategory().getId() == null) {
+            errors.add("Veuillez selectionner une categorie");
         }
         return errors;
     }

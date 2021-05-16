@@ -15,7 +15,7 @@ public class EntrepriseValidator {
             errors.add("Veuillez reseigner le code fiscal de l'entreprise");
             errors.add("Veuillez reseigner l'email de l'entreprise");
             errors.add("Veuillez reseigner le numero de telephone de l'entreprise");
-            errors.add("Veuillez renseigner l'adresse d'utilisateur");
+            errors.addAll(AdresseValidator.validate(null));
             return errors;
         }
 
@@ -35,22 +35,7 @@ public class EntrepriseValidator {
             errors.add("Veuillez reseigner le numero de telephone de l'entreprise");
         }
 
-        if (dto.getAdresse() == null) {
-            errors.add("Veuillez renseigner l'adresse d'utilisateur");
-        } else {
-            if (!StringUtils.hasLength(dto.getAdresse().getAdresse1())) {
-                errors.add("Le champs 'Adresse1' est obligatoire");
-            }
-            if (!StringUtils.hasLength(dto.getAdresse().getVille())) {
-                errors.add("Le champs 'Vile' est obligatoire");
-            }
-            if (!StringUtils.hasLength(dto.getAdresse().getCodePostale())) {
-                errors.add("Le champs 'Code postale' est obligatoire");
-            }
-            if (!StringUtils.hasLength(dto.getAdresse().getPays())) {
-                errors.add("Le champs 'Pays' est obligatoire");
-            }
-        }        return errors;
+        errors.addAll(AdresseValidator.validate(dto.getAdresse()));
+        return errors;
     }
-
 }
