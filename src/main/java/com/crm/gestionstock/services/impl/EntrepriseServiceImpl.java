@@ -4,7 +4,6 @@ import com.crm.gestionstock.dto.EntrepriseDto;
 import com.crm.gestionstock.exception.EntityNotFoundException;
 import com.crm.gestionstock.exception.ErrorCodes;
 import com.crm.gestionstock.exception.InvalidEntityException;
-import com.crm.gestionstock.model.Entreprise;
 import com.crm.gestionstock.repository.EntrepriseRepository;
 import com.crm.gestionstock.services.EntrepriseService;
 import com.crm.gestionstock.validator.EntrepriseValidator;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,13 +44,9 @@ public class EntrepriseServiceImpl implements EntrepriseService {
             log.error("Enreprise ID is null");
             return null;
         }
-        Optional<Entreprise> entreprise = entrepriseRepository.findById(id);
-        return Optional
-                .ofNullable(
-                        EntrepriseDto.fromEntity(
-                                entreprise.orElse(null)
-                        )
-                )
+        return entrepriseRepository
+                .findById(id)
+                .map(EntrepriseDto::fromEntity)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Aucun entreprise avec l'ID = " + id + " n'été trouvé dans la BDD",
                                 ErrorCodes.ENTREPRISE_NOT_FOUND)

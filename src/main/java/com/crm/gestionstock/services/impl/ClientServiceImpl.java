@@ -4,7 +4,6 @@ import com.crm.gestionstock.dto.ClientDto;
 import com.crm.gestionstock.exception.EntityNotFoundException;
 import com.crm.gestionstock.exception.ErrorCodes;
 import com.crm.gestionstock.exception.InvalidEntityException;
-import com.crm.gestionstock.model.Client;
 import com.crm.gestionstock.repository.ClientRepository;
 import com.crm.gestionstock.services.ClientService;
 import com.crm.gestionstock.validator.ClientValidator;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,19 +44,14 @@ public class ClientServiceImpl implements ClientService {
             log.error("Client ID is null");
             return null;
         }
-        Optional<Client> client = clientRepository.findById(id);
-        return Optional
-                .ofNullable(
-                        ClientDto.fromEntity(
-                                client.orElse(null)
-                        )
-                )
+        return clientRepository
+                .findById(id)
+                .map(ClientDto::fromEntity)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Aucun client avec l'ID = " + id + " n'été trouvé dans la BDD",
                                 ErrorCodes.ARTICLE_NOT_FOUND)
                 );
     }
-    
 
     @Override
     public List<ClientDto> findAll() {
@@ -71,7 +64,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void delete(Integer id) {
-        if(id == null){
+        if (id == null) {
             log.error("Client ID is null");
             return;
         }

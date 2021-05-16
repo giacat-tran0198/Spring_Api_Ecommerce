@@ -47,12 +47,9 @@ public class FournisseurServiceImpl implements FournisseurService {
             return null;
         }
         Optional<Fournisseur> fournisseur = fournisseurRepository.findById(id);
-        return Optional
-                .ofNullable(
-                        FournisseurDto.fromEntity(
-                                fournisseur.orElse(null)
-                        )
-                )
+        return fournisseurRepository
+                .findById(id)
+                .map(FournisseurDto::fromEntity)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Aucun fournisseur avec l'ID = " + id + " n'été trouvé dans la BDD",
                                 ErrorCodes.FOURNISSEUR_NOT_FOUND)

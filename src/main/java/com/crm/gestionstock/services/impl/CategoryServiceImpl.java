@@ -4,7 +4,6 @@ import com.crm.gestionstock.dto.CategoryDto;
 import com.crm.gestionstock.exception.EntityNotFoundException;
 import com.crm.gestionstock.exception.ErrorCodes;
 import com.crm.gestionstock.exception.InvalidEntityException;
-import com.crm.gestionstock.model.Category;
 import com.crm.gestionstock.repository.CategoryRepository;
 import com.crm.gestionstock.services.CategoryService;
 import com.crm.gestionstock.validator.CategoryValidator;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,16 +44,13 @@ public class CategoryServiceImpl implements CategoryService {
             log.error("Category ID is null");
             return null;
         }
-        Optional<Category> category = categoryRepository.findById(id);
-        return Optional
-                .ofNullable(
-                        CategoryDto.fromEntity(
-                                category.orElse(null)
+        return categoryRepository
+                .findById(id)
+                .map(CategoryDto::fromEntity)
+                .orElseThrow(() -> new EntityNotFoundException(
+                                "Aucun categorie avec l'ID = " + id + " n'été trouvé dans la BDD",
+                                ErrorCodes.CATEGORY_NOT_FOUND
                         )
-                )
-                .orElseThrow(() ->
-                        new EntityNotFoundException("Aucun categorie avec l'ID = " + id + " n'été trouvé dans la BDD",
-                                ErrorCodes.CATEGORY_NOT_FOUND)
                 );
     }
 
@@ -65,13 +60,9 @@ public class CategoryServiceImpl implements CategoryService {
             log.error("Category CODE is null");
             return null;
         }
-        Optional<Category> category = categoryRepository.findCategoryByCode(code);
-        return Optional
-                .ofNullable(
-                        CategoryDto.fromEntity(
-                                category.orElse(null)
-                        )
-                )
+        return categoryRepository
+                .findCategoryByCode(code)
+                .map(CategoryDto::fromEntity)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Aucun categorie avec le CODE = " + code + " n'été trouvé dans la BDD",
                                 ErrorCodes.CATEGORY_NOT_FOUND)

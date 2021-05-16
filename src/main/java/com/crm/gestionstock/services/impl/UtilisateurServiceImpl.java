@@ -48,12 +48,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             return null;
         }
         Optional<Utilisateur> Utilisateur = utilisateurRepository.findById(id);
-        return Optional
-                .ofNullable(
-                        UtilisateurDto.fromEntity(
-                                Utilisateur.orElse(null)
-                        )
-                )
+        return utilisateurRepository
+                .findById(id)
+                .map(UtilisateurDto::fromEntity)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Aucun utilisateur avec l'ID = " + id + " n'été trouvé dans la BDD",
                                 ErrorCodes.UTILISATEUR_NOT_FOUND)
@@ -68,12 +65,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         }
 
         Optional<Utilisateur> Utilisateur = utilisateurRepository.findUtilisateurByEmail(email);
-        return Optional
-                .ofNullable(
-                        UtilisateurDto.fromEntity(
-                                Utilisateur.orElse(null)
-                        )
-                )
+        return utilisateurRepository
+                .findUtilisateurByEmail(email)
+                .map(UtilisateurDto::fromEntity)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Aucun utilisateur avec l'email = " + email + " n'été trouvé dans la BDD",
                                 ErrorCodes.UTILISATEUR_NOT_FOUND)
