@@ -46,7 +46,6 @@ public class FournisseurServiceImpl implements FournisseurService {
             log.error("Supplier ID is null");
             return null;
         }
-        Optional<Fournisseur> fournisseur = fournisseurRepository.findById(id);
         return fournisseurRepository
                 .findById(id)
                 .map(FournisseurDto::fromEntity)

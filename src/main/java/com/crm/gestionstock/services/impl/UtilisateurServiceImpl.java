@@ -47,7 +47,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             log.error("User ID is null");
             return null;
         }
-        Optional<Utilisateur> Utilisateur = utilisateurRepository.findById(id);
         return utilisateurRepository
                 .findById(id)
                 .map(UtilisateurDto::fromEntity)
@@ -63,8 +62,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             log.error("User EMAIL is null");
             return null;
         }
-
-        Optional<Utilisateur> Utilisateur = utilisateurRepository.findUtilisateurByEmail(email);
         return utilisateurRepository
                 .findUtilisateurByEmail(email)
                 .map(UtilisateurDto::fromEntity)
