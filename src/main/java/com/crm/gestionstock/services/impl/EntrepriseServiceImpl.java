@@ -30,7 +30,7 @@ public class EntrepriseServiceImpl implements EntrepriseService {
     public EntrepriseDto save(EntrepriseDto dto) {
         List<String> errors = EntrepriseValidator.validate(dto);
         if (!errors.isEmpty()) {
-            log.error("Company is not valid {}", dto);
+            log.error("Enreprise is not valid {}", dto);
             throw new InvalidEntityException("L'entreprise n'est pas valide", ErrorCodes.ENTREPRISE_NOT_VALID);
         }
         return EntrepriseDto.fromEntity(
@@ -43,7 +43,7 @@ public class EntrepriseServiceImpl implements EntrepriseService {
     @Override
     public EntrepriseDto findById(Integer id) {
         if (id == null) {
-            log.error("Company ID is null");
+            log.error("Enreprise ID is null");
             return null;
         }
         Optional<Entreprise> entreprise = entrepriseRepository.findById(id);
@@ -72,7 +72,7 @@ public class EntrepriseServiceImpl implements EntrepriseService {
     @Override
     public void delete(Integer id) {
         if (id == null) {
-            log.error("Company ID is null");
+            log.error("Enreprise ID is null");
             return;
         }
         entrepriseRepository.deleteById(id);

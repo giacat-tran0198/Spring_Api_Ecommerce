@@ -30,7 +30,7 @@ public class ClientServiceImpl implements ClientService {
     public ClientDto save(ClientDto dto) {
         List<String> errors = ClientValidator.validate(dto);
         if (!errors.isEmpty()) {
-            log.error("Customer is not valid {}", dto);
+            log.error("Client is not valid {}", dto);
             throw new InvalidEntityException("Le client n'est pas valide", ErrorCodes.CLIENT_NOT_VALID);
         }
         return ClientDto.fromEntity(
@@ -43,7 +43,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientDto findById(Integer id) {
         if (id == null) {
-            log.error("Customer ID is null");
+            log.error("Client ID is null");
             return null;
         }
         Optional<Client> client = clientRepository.findById(id);
@@ -72,7 +72,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void delete(Integer id) {
         if(id == null){
-            log.error("Customer ID is null");
+            log.error("Client ID is null");
             return;
         }
         clientRepository.deleteById(id);
