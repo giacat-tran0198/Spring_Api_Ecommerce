@@ -29,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
         List<String> errors = CategoryValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("Category is not valid {}", dto);
-            throw new InvalidEntityException("La categorie n'est pas valide", ErrorCodes.CATEGORY_NOT_VALID);
+            throw new InvalidEntityException("La categorie n'est pas valide", ErrorCodes.CATEGORY_NOT_VALID, errors);
         }
         return CategoryDto.fromEntity(
                 categoryRepository.save(

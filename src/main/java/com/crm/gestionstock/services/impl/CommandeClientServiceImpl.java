@@ -50,7 +50,7 @@ public class CommandeClientServiceImpl implements CommandeClientService {
         List<String> errors = CommandeClientValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("CommandeClient isn't valid");
-            throw new InvalidEntityException("La Commande Client n'est pas valide", ErrorCodes.COMMANDE_CLIENT_NOT_VALID);
+            throw new InvalidEntityException("La Commande Client n'est pas valide", ErrorCodes.COMMANDE_CLIENT_NOT_VALID, errors);
         }
         Optional<Client> client = clientRepository.findById(dto.getClient().getId());
         if (client.isEmpty()) {

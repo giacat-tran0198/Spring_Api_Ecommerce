@@ -6,7 +6,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VentesValidator {
+public class VenteValidator {
     public static List<String> validate(VenteDto dto) {
         List<String> errors = new ArrayList<>();
         if (dto == null) {

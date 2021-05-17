@@ -36,4 +36,18 @@ public class LigneVenteDto {
                 .idEntreprise(ligneVente.getIdEntreprise())
                 .build();
     }
+
+    public static LigneVente toEntity(LigneVenteDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        LigneVente ligneVente = new LigneVente();
+        ligneVente.setId(dto.getId());
+        ligneVente.setVente(VenteDto.toEntity(dto.getVente()));
+        ligneVente.setArticle(ArticleDto.toEntity(dto.getArticle()));
+        ligneVente.setQuantite(dto.getQuantite());
+        ligneVente.setPrixUnitaire(dto.getPrixUnitaire());
+        ligneVente.setIdEntreprise(dto.getIdEntreprise());
+        return ligneVente;
+    }
 }
