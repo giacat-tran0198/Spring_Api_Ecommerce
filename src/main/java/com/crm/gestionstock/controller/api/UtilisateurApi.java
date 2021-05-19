@@ -51,7 +51,7 @@ public interface UtilisateurApi {
     })
     List<UtilisateurDto> findAll();
 
-    @DeleteMapping(value = APP_ROOT + "/utilisateus")
+    @DeleteMapping(value = APP_ROOT + "/utilisateus/{id}")
     @ApiOperation(value = "Supprimer un utilisateur", notes = "Cette methode permet de supprimer un utilisateur par ID")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "L'utilisateur a ete supprime")

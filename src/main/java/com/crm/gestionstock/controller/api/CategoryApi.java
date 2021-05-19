@@ -49,7 +49,7 @@ public interface CategoryApi {
     })
     List<CategoryDto> findAll();
 
-    @DeleteMapping(value = APP_ROOT + "/categories")
+    @DeleteMapping(value = APP_ROOT + "/categories/{id}")
     @ApiOperation(value = "Supprimer un categorie", notes = "Cette methode permet de supprimer une categorie par ID")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "La categorie a ete supprime")

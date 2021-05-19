@@ -40,7 +40,7 @@ public interface FournisseurApi {
     })
     List<FournisseurDto> findAll();
 
-    @DeleteMapping(value = APP_ROOT + "/fournisseurs")
+    @DeleteMapping(value = APP_ROOT + "/fournisseurs/{id}")
     @ApiOperation(value = "Supprimer un fournisseur", notes = "Cette methode permet de supprimer un fournisseur par ID")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Le fournisseur a ete supprime")

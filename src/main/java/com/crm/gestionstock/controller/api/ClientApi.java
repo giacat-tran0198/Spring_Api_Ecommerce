@@ -41,7 +41,7 @@ public interface ClientApi {
     })
     List<ClientDto> findAll();
 
-    @DeleteMapping(value = APP_ROOT + "/clients")
+    @DeleteMapping(value = APP_ROOT + "/clients/{id}")
     @ApiOperation(value = "Supprimer un client", notes = "Cette methode permet de supprimer un client par ID")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Le client a ete supprime")

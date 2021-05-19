@@ -47,7 +47,7 @@ public interface ArticleApi {
     })
     List<ArticleDto> findAll();
 
-    @DeleteMapping(value = APP_ROOT + "/articles")
+    @DeleteMapping(value = APP_ROOT + "/articles/{id}")
     @ApiOperation(value = "Supprimer un article", notes = "Cette methode permet de supprimer un article par ID")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "L'article a ete supprime")

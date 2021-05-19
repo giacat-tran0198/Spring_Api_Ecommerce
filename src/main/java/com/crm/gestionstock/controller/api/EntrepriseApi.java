@@ -40,7 +40,7 @@ public interface EntrepriseApi {
     })
     List<EntrepriseDto> findAll();
 
-    @DeleteMapping(value = APP_ROOT + "/enreprises")
+    @DeleteMapping(value = APP_ROOT + "/enreprises/{id}")
     @ApiOperation(value = "Supprimer une entreprise", notes = "Cette methode permet de supprimer une entreprise par ID")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "L'entreprise a ete supprime")
