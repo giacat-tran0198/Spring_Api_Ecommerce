@@ -12,6 +12,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
+        ejb:
+          interceptor: com.crm.gestionstock.interceptor.Interceptor
 server:
   port: 8081
 flickr:
