@@ -48,17 +48,17 @@ public class EntrepriseServiceImpl implements EntrepriseService {
                         EntrepriseDto.toEntity(dto)
                 )
         );
-
-        UtilisateurDto utilisateur = fromEntreprise(savedEntreprise);
-
-        UtilisateurDto savedUser = utilisateurService.save(utilisateur);
-
-        RolesDto rolesDto = RolesDto.builder()
-                .roleName("ADMIN")
-                .utilisateur(savedUser)
-                .build();
-
-        rolesRepository.save(RolesDto.toEntity(rolesDto));
+        // Test
+//        UtilisateurDto utilisateur = fromEntreprise(savedEntreprise);
+//
+//        UtilisateurDto savedUser = utilisateurService.save(utilisateur);
+//
+//        RolesDto rolesDto = RolesDto.builder()
+//                .roleName("ADMIN")
+//                .utilisateur(savedUser)
+//                .build();
+//
+//        rolesRepository.saverolesRepository.save(RolesDto.toEntity(rolesDto));
 
         return savedEntreprise;
     }

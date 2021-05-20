@@ -14,6 +14,7 @@ public class UtilisateurValidator {
             errors.add("Veuillez renseigner le nom d'utilisateur");
             errors.add("Veuillez renseigner le prenom d'utilisateur");
             errors.add("Veuillez renseigner le mot de passe d'utilisateur");
+            errors.add("Veuillez renseigner le date de naissaince d'utilisateur");
             errors.add("Veuillez renseigner l'adresse d'utilisateur");
             errors.addAll(AdresseValidator.validate(null));
             return errors;

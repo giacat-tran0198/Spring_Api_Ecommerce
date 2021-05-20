@@ -43,6 +43,6 @@ public class Utilisateur extends AbstractEntity {
     @JoinColumn(name = "identreprise")
     private Entreprise entreprise;
 
-    @OneToMany(mappedBy = "utilisateur")
+    @OneToMany(mappedBy = "utilisateur", orphanRemoval = true)
     private List<Roles> roles;
 }
