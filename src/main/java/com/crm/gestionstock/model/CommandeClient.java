@@ -1,5 +1,6 @@
 package com.crm.gestionstock.model;
 
+import com.crm.gestionstock.model.enums.EtatCommande;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,6 +23,9 @@ public class CommandeClient extends AbstractEntity {
 
     @Column(name = "datecommande")
     private Instant dateCommande;
+
+    @Column(name = "etatcommande")
+    private EtatCommande etatCommande;
 
     @Column(name = "identreprise")
     private Integer idEntreprise;

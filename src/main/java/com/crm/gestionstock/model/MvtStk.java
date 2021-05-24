@@ -1,5 +1,6 @@
 package com.crm.gestionstock.model;
 
+import com.crm.gestionstock.model.enums.TypeMvtStk;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

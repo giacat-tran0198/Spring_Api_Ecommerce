@@ -2,6 +2,7 @@ package com.crm.gestionstock.dto;
 
 
 import com.crm.gestionstock.model.CommandeFournisseur;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 
@@ -21,6 +22,7 @@ public class CommandeFournisseurDto {
 
     private Integer idEntreprise;
 
+    @JsonIgnore
     private List<LigneCommandeFournisseurDto> ligneCommandeFournisseurs;
 
     public static CommandeFournisseurDto fromEntity(CommandeFournisseur commandeFournisseur) {

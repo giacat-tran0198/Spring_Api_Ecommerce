@@ -2,7 +2,7 @@ package com.crm.gestionstock.dto;
 
 
 import com.crm.gestionstock.model.MvtStk;
-import com.crm.gestionstock.model.TypeMvtStk;
+import com.crm.gestionstock.model.enums.TypeMvtStk;
 import lombok.Builder;
 import lombok.Data;
 
