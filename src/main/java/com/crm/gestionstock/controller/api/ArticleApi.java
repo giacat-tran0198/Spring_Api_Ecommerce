@@ -1,6 +1,9 @@
 package com.crm.gestionstock.controller.api;
 
 import com.crm.gestionstock.dto.ArticleDto;
+import com.crm.gestionstock.dto.LigneCommandeClientDto;
+import com.crm.gestionstock.dto.LigneCommandeFournisseurDto;
+import com.crm.gestionstock.dto.LigneVenteDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -46,6 +49,19 @@ public interface ArticleApi {
             @ApiResponse(code = 200, message = "La liste des article / Une liste vide")
     })
     List<ArticleDto> findAll();
+
+    @GetMapping(value = APP_ROOT + "/articles/vente/{idArticle}", produces = MediaType.APPLICATION_JSON_VALUE)
+    List<LigneVenteDto> findHistoriqueVentes(@PathVariable Integer idArticle);
+
+    @GetMapping(value = APP_ROOT + "/articles/commandeclient/{idArticle}", produces = MediaType.APPLICATION_JSON_VALUE)
+    List<LigneCommandeClientDto> findHistoriaueCommandeClient(@PathVariable Integer idArticle);
+
+    @GetMapping(value = APP_ROOT + "/articles/commandefournisseur/{idArticle}", produces = MediaType.APPLICATION_JSON_VALUE)
+    List<LigneCommandeFournisseurDto> findHistoriqueCommandeFournisseur(@PathVariable Integer idArticle);
+
+    @GetMapping(value = APP_ROOT + "/articles/category/{idCategory}", produces = MediaType.APPLICATION_JSON_VALUE)
+    List<ArticleDto> findAllArticleByIdCategory(@PathVariable Integer idCategory);
+
 
     @DeleteMapping(value = APP_ROOT + "/articles/{id}")
     @ApiOperation(value = "Supprimer un article", notes = "Cette methode permet de supprimer un article par ID")
