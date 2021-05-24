@@ -1,9 +1,6 @@
 package com.crm.gestionstock.services.impl;
 
-import com.crm.gestionstock.dto.ArticleDto;
-import com.crm.gestionstock.dto.ClientDto;
-import com.crm.gestionstock.dto.CommandeClientDto;
-import com.crm.gestionstock.dto.LigneCommandeClientDto;
+import com.crm.gestionstock.dto.*;
 import com.crm.gestionstock.exception.EntityNotFoundException;
 import com.crm.gestionstock.exception.ErrorCodes;
 import com.crm.gestionstock.exception.InvalidEntityException;
@@ -13,11 +10,14 @@ import com.crm.gestionstock.model.Client;
 import com.crm.gestionstock.model.CommandeClient;
 import com.crm.gestionstock.model.LigneCommandeClient;
 import com.crm.gestionstock.model.enums.EtatCommande;
+import com.crm.gestionstock.model.enums.SourceMvtStk;
+import com.crm.gestionstock.model.enums.TypeMvtStk;
 import com.crm.gestionstock.repository.ArticleRepository;
 import com.crm.gestionstock.repository.ClientRepository;
 import com.crm.gestionstock.repository.CommandeClientRepository;
 import com.crm.gestionstock.repository.LigneCommandeClientRepository;
 import com.crm.gestionstock.services.CommandeClientService;
+import com.crm.gestionstock.services.MvtStkService;
 import com.crm.gestionstock.validator.ArticleValidator;
 import com.crm.gestionstock.validator.CommandeClientValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,16 +40,19 @@ public class CommandeClientServiceImpl implements CommandeClientService {
     private final ClientRepository clientRepository;
     private final ArticleRepository articleRepository;
     private final LigneCommandeClientRepository ligneCommandeClientRepository;
+    private final MvtStkService mvtStkService;
 
     @Autowired
     public CommandeClientServiceImpl(CommandeClientRepository commandeClientRepository,
                                      ClientRepository clientRepository,
                                      ArticleRepository articleRepository,
-                                     LigneCommandeClientRepository ligneCommandeClientRepository) {
+                                     LigneCommandeClientRepository ligneCommandeClientRepository,
+                                     MvtStkService mvtStkService) {
         this.commandeClientRepository = commandeClientRepository;
         this.clientRepository = clientRepository;
         this.articleRepository = articleRepository;
         this.ligneCommandeClientRepository = ligneCommandeClientRepository;
+        this.mvtStkService = mvtStkService;
     }
 
     @Override
@@ -157,7 +161,12 @@ public class CommandeClientServiceImpl implements CommandeClientService {
         CommandeClientDto commandeClient = checkEtatCommande(id);
         commandeClient.setEtatCommande(etatCommande);
 
-        return CommandeClientDto.fromEntity(commandeClientRepository.save(CommandeClientDto.toEntity(commandeClient)));
+        CommandeClient savedCmdClt = commandeClientRepository.save(CommandeClientDto.toEntity(commandeClient));
+        if (commandeClient.isCommandeLivree()) {
+            updateMvtStk(id);
+        }
+
+        return CommandeClientDto.fromEntity(savedCmdClt);
     }
 
     @Override
@@ -293,5 +302,22 @@ public class CommandeClientServiceImpl implements CommandeClientService {
                     ErrorCodes.COMMANDE_CLIENT_NON_MODIFIABLE);
         }
         return commandeClient;
+    }
+
+    private void updateMvtStk(Integer idCommande) {
+        List<LigneCommandeClient> ligneCommandeClients = ligneCommandeClientRepository.findAllByCommandeClientId(idCommande);
+        ligneCommandeClients.forEach(this::effectuerSortie);
+    }
+
+    private void effectuerSortie(LigneCommandeClient lig) {
+        MvtStkDto mvtStkDto = MvtStkDto.builder()
+                .article(ArticleDto.fromEntity(lig.getArticle()))
+                .dateMvt(Instant.now())
+                .typeMvt(TypeMvtStk.SORTIE)
+                .sourceMvt(SourceMvtStk.COMMANDE_CLIENT)
+                .quantite(lig.getQuantite())
+                .idEntreprise(lig.getIdEntreprise())
+                .build();
+        mvtStkService.sortieStock(mvtStkDto);
     }
 }

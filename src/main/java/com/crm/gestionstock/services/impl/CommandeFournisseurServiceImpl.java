@@ -1,9 +1,6 @@
 package com.crm.gestionstock.services.impl;
 
-import com.crm.gestionstock.dto.ArticleDto;
-import com.crm.gestionstock.dto.CommandeFournisseurDto;
-import com.crm.gestionstock.dto.FournisseurDto;
-import com.crm.gestionstock.dto.LigneCommandeFournisseurDto;
+import com.crm.gestionstock.dto.*;
 import com.crm.gestionstock.exception.EntityNotFoundException;
 import com.crm.gestionstock.exception.ErrorCodes;
 import com.crm.gestionstock.exception.InvalidEntityException;
@@ -13,11 +10,14 @@ import com.crm.gestionstock.model.CommandeFournisseur;
 import com.crm.gestionstock.model.Fournisseur;
 import com.crm.gestionstock.model.LigneCommandeFournisseur;
 import com.crm.gestionstock.model.enums.EtatCommande;
+import com.crm.gestionstock.model.enums.SourceMvtStk;
+import com.crm.gestionstock.model.enums.TypeMvtStk;
 import com.crm.gestionstock.repository.ArticleRepository;
 import com.crm.gestionstock.repository.CommandeFournisseurRepository;
 import com.crm.gestionstock.repository.FournisseurRepository;
 import com.crm.gestionstock.repository.LigneCommandeFournisseurRepository;
 import com.crm.gestionstock.services.CommandeFournisseurService;
+import com.crm.gestionstock.services.MvtStkService;
 import com.crm.gestionstock.validator.ArticleValidator;
 import com.crm.gestionstock.validator.CommandeFournisseurValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,16 +40,19 @@ public class CommandeFournisseurServiceImpl implements CommandeFournisseurServic
     private final FournisseurRepository fournisseurRepository;
     private final ArticleRepository articleRepository;
     private final LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository;
+    private final MvtStkService mvtStkService;
 
     @Autowired
     public CommandeFournisseurServiceImpl(CommandeFournisseurRepository commandeFournisseurRepository,
                                           FournisseurRepository fournisseurRepository,
                                           ArticleRepository articleRepository,
-                                          LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository) {
+                                          LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository,
+                                          MvtStkService mvtStkService) {
         this.commandeFournisseurRepository = commandeFournisseurRepository;
         this.fournisseurRepository = fournisseurRepository;
         this.articleRepository = articleRepository;
         this.ligneCommandeFournisseurRepository = ligneCommandeFournisseurRepository;
+        this.mvtStkService = mvtStkService;
     }
 
     @Override
@@ -153,7 +157,9 @@ public class CommandeFournisseurServiceImpl implements CommandeFournisseurServic
         commandeFournisseur.setEtatCommande(etatCommande);
 
         CommandeFournisseur savedCommande = commandeFournisseurRepository.save(CommandeFournisseurDto.toEntity(commandeFournisseur));
-
+        if (commandeFournisseur.isCommandeLivree()) {
+            updateMvtStk(idCommande);
+        }
         return CommandeFournisseurDto.fromEntity(savedCommande);
     }
 
@@ -284,4 +290,22 @@ public class CommandeFournisseurServiceImpl implements CommandeFournisseurServic
                     ErrorCodes.COMMANDE_FOURNISSEUR_NON_MODIFIABLE);
         }
     }
+
+    private void updateMvtStk(Integer idCommande) {
+        List<LigneCommandeFournisseur> ligneCommandeFournisseur = ligneCommandeFournisseurRepository.findAllByCommandeFournisseurId(idCommande);
+        ligneCommandeFournisseur.forEach(this::effectuerEntree);
+    }
+
+    private void effectuerEntree(LigneCommandeFournisseur lig) {
+        MvtStkDto mvtStkDto = MvtStkDto.builder()
+                .article(ArticleDto.fromEntity(lig.getArticle()))
+                .dateMvt(Instant.now())
+                .typeMvt(TypeMvtStk.ENTREE)
+                .sourceMvt(SourceMvtStk.COMMANDE_FOURNISSEUR)
+                .quantite(lig.getQuantite())
+                .idEntreprise(lig.getIdEntreprise())
+                .build();
+        mvtStkService.entreeStock(mvtStkDto);
+    }
+
 }

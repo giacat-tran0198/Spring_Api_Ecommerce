@@ -2,6 +2,7 @@ package com.crm.gestionstock.dto;
 
 
 import com.crm.gestionstock.model.MvtStk;
+import com.crm.gestionstock.model.enums.SourceMvtStk;
 import com.crm.gestionstock.model.enums.TypeMvtStk;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +25,8 @@ public class MvtStkDto {
 
     private Integer idEntreprise;
 
+    private SourceMvtStk sourceMvt;
+
     public static MvtStkDto fromEntity(MvtStk mvtStk) {
         if (mvtStk == null) {
             return null;
@@ -36,6 +39,7 @@ public class MvtStkDto {
                 .article(ArticleDto.fromEntity(mvtStk.getArticle()))
                 .typeMvt(mvtStk.getTypeMvt())
                 .idEntreprise(mvtStk.getIdEntreprise())
+                .sourceMvt(mvtStk.getSourceMvt())
                 .build();
     }
 
@@ -51,5 +55,6 @@ public class MvtStkDto {
         mvtStk.setArticle(ArticleDto.toEntity(dto.getArticle()));
         mvtStk.setTypeMvt(dto.getTypeMvt());
         mvtStk.setIdEntreprise(dto.getIdEntreprise());
+        mvtStk.setSourceMvt(dto.getSourceMvt());
         return mvtStk;
     }}

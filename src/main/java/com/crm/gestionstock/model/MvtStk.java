@@ -1,5 +1,6 @@
 package com.crm.gestionstock.model;
 
+import com.crm.gestionstock.model.enums.SourceMvtStk;
 import com.crm.gestionstock.model.enums.TypeMvtStk;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,9 @@ public class MvtStk extends AbstractEntity {
 
     @Column(name = "typemvt")
     private TypeMvtStk typeMvt;
+
+    @Column(name = "sourcemvt")
+    private SourceMvtStk sourceMvt;
 
     @Column(name = "identreprise")
     private Integer idEntreprise;
