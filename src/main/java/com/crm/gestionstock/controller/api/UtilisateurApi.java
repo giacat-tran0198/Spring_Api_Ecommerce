@@ -2,6 +2,7 @@ package com.crm.gestionstock.controller.api;
 
 import com.crm.gestionstock.dto.UtilisateurDto;
 import com.crm.gestionstock.dto.UtilisateurDto;
+import com.crm.gestionstock.dto.auth.ChangerMotDePasseUtilisateurDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -24,6 +25,9 @@ public interface UtilisateurApi {
             @ApiResponse(code = 400, message = "L'objet utilisateur n'est pas valide")
     })
     UtilisateurDto save(@RequestBody UtilisateurDto dto);
+
+    @PostMapping(value = APP_ROOT + "/utilisateus/update/password")
+    UtilisateurDto changerMotDePasse(@RequestBody ChangerMotDePasseUtilisateurDto dto);
 
     @GetMapping(value = APP_ROOT + "/utilisateus/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Rechercher un utilisateur par ID", notes = "Cette methode permet de chercher un utilisateur par son ID", response =

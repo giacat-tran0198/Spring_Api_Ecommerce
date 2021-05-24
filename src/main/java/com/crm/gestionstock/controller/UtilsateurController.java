@@ -2,6 +2,7 @@ package com.crm.gestionstock.controller;
 
 import com.crm.gestionstock.controller.api.UtilisateurApi;
 import com.crm.gestionstock.dto.UtilisateurDto;
+import com.crm.gestionstock.dto.auth.ChangerMotDePasseUtilisateurDto;
 import com.crm.gestionstock.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,11 @@ public class UtilsateurController implements UtilisateurApi {
     @Override
     public UtilisateurDto save(UtilisateurDto dto) {
         return utilisateurService.save(dto);
+    }
+
+    @Override
+    public UtilisateurDto changerMotDePasse(ChangerMotDePasseUtilisateurDto dto) {
+        return utilisateurService.changerMotDePasse(dto);
     }
 
     @Override
