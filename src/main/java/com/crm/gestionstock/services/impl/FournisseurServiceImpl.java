@@ -6,6 +6,7 @@ import com.crm.gestionstock.exception.ErrorCodes;
 import com.crm.gestionstock.exception.InvalidEntityException;
 import com.crm.gestionstock.exception.InvalidOperationException;
 import com.crm.gestionstock.model.CommandeClient;
+import com.crm.gestionstock.model.CommandeFournisseur;
 import com.crm.gestionstock.model.Fournisseur;
 import com.crm.gestionstock.repository.CommandeFournisseurRepository;
 import com.crm.gestionstock.repository.FournisseurRepository;
@@ -76,7 +77,7 @@ public class FournisseurServiceImpl implements FournisseurService {
             log.error("Supplier ID is null");
             return;
         }
-        List<CommandeClient> commandeFournisseur = commandeFournisseurRepository.findAllByFournisseurId(id);
+        List<CommandeFournisseur> commandeFournisseur = commandeFournisseurRepository.findAllByFournisseurId(id);
         if (!commandeFournisseur.isEmpty()) {
             throw new InvalidOperationException("Impossible de supprimer un fournisseur qui a deja des commandes",
                     ErrorCodes.FOURNISSEUR_ALREADY_IN_USE);
