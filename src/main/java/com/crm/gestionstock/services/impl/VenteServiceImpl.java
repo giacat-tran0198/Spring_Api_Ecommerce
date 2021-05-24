@@ -7,6 +7,7 @@ import com.crm.gestionstock.dto.VenteDto;
 import com.crm.gestionstock.exception.EntityNotFoundException;
 import com.crm.gestionstock.exception.ErrorCodes;
 import com.crm.gestionstock.exception.InvalidEntityException;
+import com.crm.gestionstock.exception.InvalidOperationException;
 import com.crm.gestionstock.model.Article;
 import com.crm.gestionstock.model.LigneVente;
 import com.crm.gestionstock.model.Vente;
@@ -126,6 +127,11 @@ public class VenteServiceImpl implements VenteService {
         if (id == null) {
             log.error("Vente ID is null");
             return;
+        }
+        List<LigneVente> ligneVentes = ligneVenteRepository.findAllByVenteId(id);
+        if (!ligneVentes.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer une vente ...",
+                    ErrorCodes.VENTE_ALREADY_IN_USE);
         }
         venteRepository.deleteById(id);
     }

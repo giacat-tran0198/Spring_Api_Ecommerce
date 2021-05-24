@@ -4,7 +4,10 @@ import com.crm.gestionstock.dto.FournisseurDto;
 import com.crm.gestionstock.exception.EntityNotFoundException;
 import com.crm.gestionstock.exception.ErrorCodes;
 import com.crm.gestionstock.exception.InvalidEntityException;
+import com.crm.gestionstock.exception.InvalidOperationException;
+import com.crm.gestionstock.model.CommandeClient;
 import com.crm.gestionstock.model.Fournisseur;
+import com.crm.gestionstock.repository.CommandeFournisseurRepository;
 import com.crm.gestionstock.repository.FournisseurRepository;
 import com.crm.gestionstock.services.FournisseurService;
 import com.crm.gestionstock.validator.FournisseurValidator;
@@ -20,10 +23,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class FournisseurServiceImpl implements FournisseurService {
     private final FournisseurRepository fournisseurRepository;
+    private final CommandeFournisseurRepository commandeFournisseurRepository;
 
     @Autowired
-    public FournisseurServiceImpl(FournisseurRepository fournisseurRepository) {
+    public FournisseurServiceImpl(FournisseurRepository fournisseurRepository, CommandeFournisseurRepository commandeFournisseurRepository) {
         this.fournisseurRepository = fournisseurRepository;
+        this.commandeFournisseurRepository = commandeFournisseurRepository;
     }
 
     @Override
@@ -70,6 +75,11 @@ public class FournisseurServiceImpl implements FournisseurService {
         if (id == null) {
             log.error("Supplier ID is null");
             return;
+        }
+        List<CommandeClient> commandeFournisseur = commandeFournisseurRepository.findAllByFournisseurId(id);
+        if (!commandeFournisseur.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer un fournisseur qui a deja des commandes",
+                    ErrorCodes.FOURNISSEUR_ALREADY_IN_USE);
         }
         fournisseurRepository.deleteById(id);
     }

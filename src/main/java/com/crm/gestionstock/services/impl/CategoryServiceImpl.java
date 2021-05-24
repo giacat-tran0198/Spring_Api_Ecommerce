@@ -4,6 +4,9 @@ import com.crm.gestionstock.dto.CategoryDto;
 import com.crm.gestionstock.exception.EntityNotFoundException;
 import com.crm.gestionstock.exception.ErrorCodes;
 import com.crm.gestionstock.exception.InvalidEntityException;
+import com.crm.gestionstock.exception.InvalidOperationException;
+import com.crm.gestionstock.model.Article;
+import com.crm.gestionstock.repository.ArticleRepository;
 import com.crm.gestionstock.repository.CategoryRepository;
 import com.crm.gestionstock.services.CategoryService;
 import com.crm.gestionstock.validator.CategoryValidator;
@@ -18,10 +21,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
+    private final ArticleRepository articleRepository;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, ArticleRepository articleRepository) {
         this.categoryRepository = categoryRepository;
+        this.articleRepository = articleRepository;
     }
 
     @Override
@@ -83,6 +88,11 @@ public class CategoryServiceImpl implements CategoryService {
         if (id == null) {
             log.error("Category ID is null");
             return;
+        }
+        List<Article> articles = articleRepository.findAllByCategoryId(id);
+        if (!articles.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer cette categorie qui est deja utilise",
+                    ErrorCodes.CATEGORY_ALREADY_IN_USE);
         }
         categoryRepository.deleteById(id);
     }
