@@ -2,6 +2,7 @@ package com.crm.gestionstock.dto;
 
 
 import com.crm.gestionstock.model.CommandeFournisseur;
+import com.crm.gestionstock.model.enums.EtatCommande;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,8 @@ public class CommandeFournisseurDto {
 
     private Integer idEntreprise;
 
+    private EtatCommande etatCommande;
+
     @JsonIgnore
     private List<LigneCommandeFournisseurDto> ligneCommandeFournisseurs;
 
@@ -35,6 +38,7 @@ public class CommandeFournisseurDto {
                 .dateCommande(commandeFournisseur.getDateCommande())
                 .fournisseur(FournisseurDto.fromEntity(commandeFournisseur.getFournisseur()))
                 .idEntreprise(commandeFournisseur.getIdEntreprise())
+                .etatCommande(commandeFournisseur.getEtatCommande())
                 .build();
     }
 
@@ -48,6 +52,11 @@ public class CommandeFournisseurDto {
         commandeFournisseur.setDateCommande(dto.getDateCommande());
         commandeFournisseur.setFournisseur(FournisseurDto.toEntity(dto.getFournisseur()));
         commandeFournisseur.setIdEntreprise(dto.getIdEntreprise());
+        commandeFournisseur.setEtatCommande(dto.getEtatCommande());
         return commandeFournisseur;
+    }
+
+    public boolean isCommandeLivree(){
+        return EtatCommande.LIVREE.equals(etatCommande);
     }
 }

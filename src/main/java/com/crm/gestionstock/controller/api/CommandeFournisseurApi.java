@@ -1,14 +1,16 @@
 package com.crm.gestionstock.controller.api;
 
 import com.crm.gestionstock.dto.CommandeFournisseurDto;
+import com.crm.gestionstock.dto.LigneCommandeFournisseurDto;
+import com.crm.gestionstock.model.enums.EtatCommande;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static com.crm.gestionstock.utils.Constants.APP_ROOT;
@@ -22,6 +24,22 @@ public interface CommandeFournisseurApi {
             @ApiResponse(code = 400, message = "L'objet commande fournisseur n'est pas valide")
     })
     CommandeFournisseurDto save(@RequestBody CommandeFournisseurDto dto);
+
+    @PatchMapping(value = APP_ROOT + "/commandefournisseurs/etat/{idCommande}/{etatCommande}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    CommandeFournisseurDto updateEtatCommande(@PathVariable Integer idCommande, @PathVariable EtatCommande etatCommande);
+
+    @PatchMapping(value = APP_ROOT + "/commandefournisseurs/quantite/{idCommande}/{idLigneCommande}/{quantite}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    CommandeFournisseurDto updateQuantiteCommande(@PathVariable Integer idCommande, @PathVariable Integer idLigneCommande, @PathVariable BigDecimal quantite);
+
+    @PatchMapping(value = APP_ROOT + "/commandefournisseurs/fournisseur/{idCommande}/{idFournisseur}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    CommandeFournisseurDto updateFournisseur(@PathVariable Integer idCommande, @PathVariable Integer idFournisseur);
+
+    @PatchMapping(value = APP_ROOT + "/commandefournisseurs/fournisseur/article/{idCommande}/{idLigneCommande}/{idArticle}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    CommandeFournisseurDto updateArticle(@PathVariable Integer idCommande, @PathVariable Integer idLigneCommande, @PathVariable Integer idArticle);
+
+    @DeleteMapping(value = APP_ROOT + "/commandefournisseurs/fournisseur/article/{idCommande}/{idLigneCommande}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    CommandeFournisseurDto deleteArticle(@PathVariable Integer idCommande, @PathVariable Integer idLigneCommande);
+
 
     @GetMapping(value = APP_ROOT + "/commandefournisseurs/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Rechercher une commande fournisseur par ID", notes = "Cette methode permet de chercher une commande fournisseur par son ID", response = CommandeFournisseurDto.class)
@@ -47,6 +65,10 @@ public interface CommandeFournisseurApi {
             @ApiResponse(code = 200, message = "La liste des commande fournisseur / Une liste vide")
     })
     List<CommandeFournisseurDto> findAll();
+
+    @GetMapping(value = APP_ROOT + "/commandefournisseurs/lignesCommande/{idCommande}", produces = MediaType.APPLICATION_JSON_VALUE)
+    List<LigneCommandeFournisseurDto> findAllLignesCommandesFournisseurByCommandeFournisseurId(@PathVariable Integer idCommande);
+
 
     @DeleteMapping(value = APP_ROOT + "/commandefournisseurs/{id}")
     @ApiOperation(value = "Supprimer une commande fournisseur", notes = "Cette methode permet de supprimer une commande fournisseur par ID")
